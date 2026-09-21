@@ -1,0 +1,74 @@
+<div class="bg-mesh relative flex min-h-screen items-center justify-center bg-nude-50 px-4 py-12 dark:bg-nude-900">
+  <div class="absolute end-4 top-4">
+    <app-theme-toggle />
+  </div>
+
+  <div class="animate-scale-in w-full max-w-md">
+    <a routerLink="/" class="mb-8 flex items-center justify-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-10 w-10 text-sage-600 dark:text-sage-300" fill="none">
+        <path d="M8 26c0 0-4-5-4-11 0-6 5-10 11-10 0 0 1 8-3 14-2.5 3.6-4 7-4 7Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M8 25c0-3 1.5-7 4-10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+        <path d="M24 5 25 8.5 28.5 9.5 25 10.5 24 14 23 10.5 19.5 9.5 23 8.5Z" fill="currentColor" />
+      </svg>
+      <span class="text-xl font-semibold uppercase tracking-[0.25em] text-nude-700 dark:text-nude-50">Nova</span>
+    </a>
+
+    <div class="rounded-3xl border border-nude-200 bg-white p-8 shadow-[var(--shadow-card)] dark:border-nude-700 dark:bg-nude-800">
+      <h1 class="text-center text-xl font-extrabold text-nude-700 dark:text-nude-50">تسجيل دخول لوحة التحكم</h1>
+      <p class="mt-1.5 text-center text-sm text-nude-700/60 dark:text-nude-400">من فضلك سجّلي دخولك للوصول إلى لوحة الإدارة</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="mt-6 space-y-4">
+        <div>
+          <label for="username" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">اسم المستخدم</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            autocomplete="username"
+            class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+          />
+          @if (form.controls.username.invalid && form.controls.username.touched) {
+            <p class="mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي اسم المستخدم</p>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">كلمة المرور</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+            class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+          />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <p class="mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي كلمة المرور</p>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <div class="animate-fade-in rounded-xl border border-ruby-200 bg-ruby-50 px-4 py-2.5 text-sm font-medium text-ruby-600 dark:border-ruby-800 dark:bg-ruby-900/30 dark:text-ruby-300">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          [disabled]="submitting()"
+          class="btn-shine flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-sage-500 to-sage-400 px-6 py-3 font-bold text-white shadow-lg shadow-sage-400/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-70"
+        >
+          @if (submitting()) {
+            <app-spinner size="sm" />
+            <span>جارِ الدخول...</span>
+          } @else {
+            <span>تسجيل الدخول</span>
+          }
+        </button>
+      </form>
+    </div>
+
+    <a routerLink="/" class="mt-6 block text-center text-sm font-semibold text-nude-700/60 transition hover:text-sage-600 dark:text-nude-400 dark:hover:text-sage-300">
+      العودة إلى المتجر
+    </a>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div>
+  <h3 class="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-wide text-nude-600 dark:text-nude-300">
+    <span class="h-4 w-1 rounded-full bg-gradient-to-b from-sage-500 to-sage-300"></span>
+    إضافة كوبون جديد
+  </h3>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+    <div>
+      <label for="code" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">كود الكوبون</label>
+      <input
+        id="code"
+        type="text"
+        formControlName="code"
+        placeholder="مثال: WELCOME10"
+        dir="ltr"
+        class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm uppercase tracking-wide outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+      />
+      @if (form.controls.code.invalid && form.controls.code.touched) {
+        <p class="mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي كود كوبون صالح (٣ أحرف على الأقل)</p>
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="discountType" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">نوع الخصم</label>
+        <select
+          id="discountType"
+          formControlName="discountType"
+          class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+        >
+          <option value="PERCENTAGE">نسبة مئوية %</option>
+          <option value="FIXED">مبلغ ثابت ج.م</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="value" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">القيمة</label>
+        <input
+          id="value"
+          type="number"
+          min="0"
+          step="0.01"
+          formControlName="value"
+          class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+        />
+        @if (form.controls.value.invalid && form.controls.value.touched) {
+          <p class="mt-1 text-xs font-medium text-ruby-500">أدخلي قيمة صحيحة</p>
+        }
+      </div>
+    </div>
+
+    <div>
+      <label for="expiryDate" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">تاريخ الانتهاء (اختياري)</label>
+      <input
+        id="expiryDate"
+        type="datetime-local"
+        formControlName="expiryDate"
+        dir="ltr"
+        class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+      />
+      <p class="mt-1 text-xs text-nude-700/60 dark:text-nude-400">اتركيه فارغًا لو الكوبون بدون تاريخ انتهاء</p>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="submitting()"
+      class="btn-shine flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-sage-500 to-sage-400 px-6 py-3 font-bold text-white shadow-lg shadow-sage-400/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-70"
+    >
+      @if (submitting()) {
+        <app-spinner size="sm" />
+        <span>جارِ الإضافة...</span>
+      } @else {
+        <span>إضافة الكوبون</span>
+      }
+    </button>
+  </form>
+</div>

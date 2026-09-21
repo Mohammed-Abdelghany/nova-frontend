@@ -1,0 +1,133 @@
+<div class="flex min-h-screen bg-nude-50 dark:bg-nude-900">
+  <!-- Sidebar (desktop) -->
+  <aside class="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-s border-nude-200 bg-white lg:flex dark:border-nude-700 dark:bg-nude-800">
+    <div class="flex items-center gap-2 px-6 py-5">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-9 w-9 shrink-0 text-sage-600 dark:text-sage-300" fill="none">
+        <path d="M8 26c0 0-4-5-4-11 0-6 5-10 11-10 0 0 1 8-3 14-2.5 3.6-4 7-4 7Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M8 25c0-3 1.5-7 4-10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+        <path d="M24 5 25 8.5 28.5 9.5 25 10.5 24 14 23 10.5 19.5 9.5 23 8.5Z" fill="currentColor" />
+      </svg>
+      <div class="flex-1">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-nude-700 dark:text-nude-50">Nova</p>
+        <p class="text-xs text-nude-700/50 dark:text-nude-400">لوحة التحكم</p>
+      </div>
+      <app-theme-toggle />
+    </div>
+
+    <nav class="flex-1 space-y-1 px-3 py-2">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="bg-sage-50 text-sage-700 dark:bg-nude-700 dark:text-sage-300"
+          class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-nude-700/70 transition hover:bg-nude-100 hover:text-nude-700 dark:text-nude-300 dark:hover:bg-nude-700 dark:hover:text-nude-50"
+        >
+          <span class="flex h-5 w-5 items-center justify-center">
+            @switch (link.icon) {
+              @case ('grid') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+                  <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
+                </svg>
+              }
+              @case ('box') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.5 8.5 12 4l8.5 4.5M3.5 8.5 12 13m-8.5-4.5v7L12 20m0-7 8.5-4.5m-8.5 4.5v7m8.5-7v7L12 20" />
+                </svg>
+              }
+              @case ('cart') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h2l2.2 11.4a2 2 0 002 1.6h7.6a2 2 0 002-1.6L20 8H6" />
+                  <circle cx="9.5" cy="20" r="1.4" /><circle cx="17" cy="20" r="1.4" />
+                </svg>
+              }
+              @case ('tag') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v2a2 2 0 010 4v2a2 2 0 002 2h10a2 2 0 002-2v-2a2 2 0 010-4V7a2 2 0 00-2-2h-2" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2" d="M9 3v18" />
+                </svg>
+              }
+              @case ('truck') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a1 1 0 011-1h9a1 1 0 011 1v9H4a1 1 0 01-1-1V7Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h3.5L20 13v3h-6v-6Z" />
+                  <circle cx="7.5" cy="18" r="1.8" /><circle cx="17" cy="18" r="1.8" />
+                </svg>
+              }
+              @case ('gear') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              }
+            }
+          </span>
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="border-t border-nude-200 p-3 dark:border-nude-700">
+      <div class="mb-2 flex items-center gap-2.5 rounded-xl bg-nude-50 px-3 py-2.5 dark:bg-nude-900/60">
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-nude-300 to-nude-400 text-xs font-extrabold text-white">
+          {{ username()?.charAt(0)?.toUpperCase() }}
+        </span>
+        <p class="truncate text-sm font-semibold text-nude-700 dark:text-nude-100">{{ username() }}</p>
+      </div>
+      <button
+        type="button"
+        (click)="logout()"
+        class="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-ruby-500 transition hover:bg-ruby-50 dark:hover:bg-ruby-900/30"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17v1a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h7a2 2 0 012 2v1M10 12h10m0 0-3-3m3 3-3 3" />
+        </svg>
+        تسجيل الخروج
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile topbar -->
+  <div class="flex flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex items-center justify-between border-b border-nude-200 bg-white/90 px-4 py-3 backdrop-blur-md dark:border-nude-700 dark:bg-nude-800/90 lg:hidden">
+      <button type="button" (click)="toggleMobileNav()" class="rounded-lg p-2 text-nude-600 hover:bg-nude-100 dark:text-nude-300 dark:hover:bg-nude-700" aria-label="القائمة">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <p class="text-sm font-extrabold text-nude-700 dark:text-nude-50">لوحة التحكم</p>
+      <div class="flex items-center gap-1">
+        <app-theme-toggle />
+        <a routerLink="/" class="px-1.5 text-xs font-semibold text-sage-600 dark:text-sage-300">المتجر</a>
+      </div>
+    </header>
+
+    @if (mobileNavOpen()) {
+      <div class="fixed inset-0 z-40 lg:hidden">
+        <div class="absolute inset-0 bg-nude-700/50 backdrop-blur-sm" (click)="closeMobileNav()"></div>
+        <nav class="animate-fade-in-up absolute end-0 top-0 flex h-full w-72 flex-col gap-1 bg-white p-4 shadow-2xl dark:bg-nude-800">
+          @for (link of navLinks; track link.path) {
+            <a
+              [routerLink]="link.path"
+              routerLinkActive="bg-sage-50 text-sage-700 dark:bg-nude-700 dark:text-sage-300"
+              (click)="closeMobileNav()"
+              class="rounded-xl px-3.5 py-3 text-sm font-semibold text-nude-700/70 transition hover:bg-nude-100 dark:text-nude-300 dark:hover:bg-nude-700"
+            >
+              {{ link.label }}
+            </a>
+          }
+          <button
+            type="button"
+            (click)="logout()"
+            class="mt-2 rounded-xl px-3.5 py-3 text-start text-sm font-semibold text-ruby-500 transition hover:bg-ruby-50 dark:hover:bg-ruby-900/30"
+          >
+            تسجيل الخروج
+          </button>
+        </nav>
+      </div>
+    }
+
+    <main class="flex-1 p-4 sm:p-6 lg:p-8">
+      <router-outlet />
+    </main>
+  </div>
+</div>

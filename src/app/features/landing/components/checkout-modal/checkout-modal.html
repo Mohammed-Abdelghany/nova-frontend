@@ -1,0 +1,235 @@
+<div
+  class="animate-fade-in fixed inset-0 z-50 flex items-center justify-center bg-nude-700/50 p-4 backdrop-blur-sm"
+  (click)="onBackdropClick($event)"
+>
+  <div
+    class="animate-scale-in max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl dark:bg-nude-800 sm:p-8"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="checkout-title"
+  >
+    @if (state() === 'form') {
+      <div class="mb-5 flex items-start justify-between gap-4">
+        <div>
+          <h2 id="checkout-title" class="text-xl font-extrabold text-nude-700 dark:text-nude-50">إتمام الطلب</h2>
+          <p class="mt-1 text-sm text-nude-700/70 dark:text-nude-300">{{ cartService.itemCount() }} منتج في السلة</p>
+        </div>
+        <button
+          type="button"
+          class="shrink-0 rounded-full p-1.5 text-nude-400 transition hover:rotate-90 hover:bg-nude-100 hover:text-nude-700 dark:hover:bg-nude-700 dark:hover:text-nude-100"
+          (click)="close()"
+          aria-label="إغلاق"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mb-5 max-h-40 space-y-2 overflow-y-auto rounded-2xl border border-nude-200 bg-nude-50/60 p-3 dark:border-nude-700 dark:bg-nude-900/40">
+        @for (line of cartService.lines(); track line.product.id) {
+          <div class="flex items-center justify-between text-sm">
+            <span class="truncate text-nude-700/80 dark:text-nude-200">{{ line.product.title }} <span class="text-nude-400">×{{ line.quantity }}</span></span>
+            <span class="shrink-0 font-semibold text-nude-700 dark:text-nude-100">{{ (line.product.finalPrice * line.quantity).toFixed(2) }} ج.م</span>
+          </div>
+        }
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+        <div>
+          <label for="customerName" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">الاسم الثلاثي</label>
+          <input
+            id="customerName"
+            type="text"
+            formControlName="customerName"
+            placeholder="مثال: سارة أحمد محمد"
+            class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+          />
+          @if (form.controls.customerName.invalid && form.controls.customerName.touched) {
+            <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي الاسم الثلاثي كاملًا</p>
+          }
+        </div>
+
+        <div>
+          <label for="customerPhone" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">رقم الموبايل</label>
+          <input
+            id="customerPhone"
+            type="tel"
+            formControlName="customerPhone"
+            placeholder="01xxxxxxxxx"
+            dir="ltr"
+            class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+          />
+          @if (form.controls.customerPhone.invalid && form.controls.customerPhone.touched) {
+            <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي رقم موبايل مصري صحيح</p>
+          }
+        </div>
+
+        <div>
+          <label for="governorate" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">المحافظة</label>
+          <select
+            id="governorate"
+            formControlName="governorate"
+            (change)="onGovernorateChange($any($event.target).value)"
+            class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+          >
+            <option value="" disabled>اختاري المحافظة</option>
+            @for (gov of governorates; track gov) {
+              <option [value]="gov">{{ gov }}</option>
+            }
+          </select>
+          @if (form.controls.governorate.invalid && form.controls.governorate.touched) {
+            <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك اختاري المحافظة</p>
+          } @else if (deliveryFee() > 0) {
+            <p class="animate-fade-in-up mt-1.5 text-xs font-semibold text-sage-600 dark:text-sage-300">
+              رسوم التوصيل لهذه المحافظة: {{ deliveryFee() }} ج.م
+            </p>
+          }
+        </div>
+
+        <div>
+          <label for="address" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">العنوان بالتفصيل</label>
+          <textarea
+            id="address"
+            formControlName="address"
+            rows="3"
+            placeholder="الحي، الشارع، رقم العقار، علامة مميزة..."
+            class="w-full resize-none rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+          ></textarea>
+          @if (form.controls.address.invalid && form.controls.address.touched) {
+            <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي عنوانًا تفصيليًا</p>
+          }
+        </div>
+
+        <div>
+          <label for="couponCode" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">كود الخصم (اختياري)</label>
+          <div class="flex gap-2">
+            <input
+              id="couponCode"
+              type="text"
+              [formControl]="couponControl"
+              (input)="onCouponInput()"
+              placeholder="مثال: WELCOME10"
+              dir="ltr"
+              class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm uppercase tracking-wide outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+            />
+            <button
+              type="button"
+              [disabled]="!couponControl.value.trim() || verifyingCoupon()"
+              (click)="verifyCoupon()"
+              class="flex shrink-0 items-center gap-1.5 rounded-xl border-2 border-sage-300 px-4 text-sm font-bold text-sage-600 transition hover:border-sage-400 hover:bg-sage-50 disabled:pointer-events-none disabled:opacity-50 dark:border-sage-700 dark:text-sage-300 dark:hover:bg-sage-900/30"
+            >
+              @if (verifyingCoupon()) {
+                <app-spinner size="sm" />
+              } @else {
+                تحقق
+              }
+            </button>
+          </div>
+
+          @if (verifiedCoupon(); as verified) {
+            <p class="animate-fade-in-up mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-sage-600 dark:text-sage-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              الكود صحيح! خصم {{ verified.discountAmount }} ج.م
+            </p>
+          } @else if (couponError()) {
+            <p class="animate-fade-in-up mt-1.5 text-xs font-medium text-ruby-500">{{ couponError() }}</p>
+          }
+        </div>
+
+        <div class="rounded-2xl border border-nude-200 bg-nude-50/60 p-4 text-sm dark:border-nude-700 dark:bg-nude-900/40">
+          <div class="flex items-center justify-between text-nude-700/70 dark:text-nude-300">
+            <span>الإجمالي الفرعي</span>
+            <span>{{ cartService.subtotal().toFixed(2) }} ج.م</span>
+          </div>
+          @if (verifiedCoupon(); as verified) {
+            <div class="mt-1.5 flex items-center justify-between font-semibold text-ruby-600 dark:text-ruby-400">
+              <span>خصم كوبون {{ verified.code }}</span>
+              <span>- {{ verified.discountAmount }} ج.م</span>
+            </div>
+          }
+          <div class="mt-1.5 flex items-center justify-between text-nude-700/70 dark:text-nude-300">
+            <span>رسوم التوصيل</span>
+            <span>{{ deliveryFee() > 0 ? deliveryFee() + ' ج.م' : '—' }}</span>
+          </div>
+          <div class="mt-2 flex items-center justify-between border-t border-nude-200 pt-2 font-extrabold text-nude-700 dark:border-nude-700 dark:text-nude-50">
+            <span>الإجمالي النهائي</span>
+            <span class="text-base text-gradient">{{ total().toFixed(2) }} ج.م</span>
+          </div>
+        </div>
+
+        @if (submitError()) {
+          <div class="animate-fade-in rounded-xl border border-ruby-200 bg-ruby-50 px-4 py-2.5 text-sm font-medium text-ruby-600 dark:border-ruby-800 dark:bg-ruby-900/30 dark:text-ruby-300">
+            {{ submitError() }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          [disabled]="submitting()"
+          class="btn-shine flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-sage-500 to-sage-400 px-6 py-3 font-bold text-white shadow-lg shadow-sage-400/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-70"
+        >
+          @if (submitting()) {
+            <app-spinner size="sm" />
+            <span>جارِ إرسال الطلب...</span>
+          } @else {
+            <span>تأكيد الطلب</span>
+          }
+        </button>
+      </form>
+    } @else {
+      <div class="flex flex-col items-center py-6 text-center">
+        <div class="animate-scale-in mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-sage-100 to-sage-200 text-sage-600 shadow-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 class="animate-fade-in-up text-xl font-extrabold text-nude-700 [animation-delay:100ms] dark:text-nude-50">تم استلام طلبك بنجاح</h2>
+        <p class="animate-fade-in-up mt-2 max-w-xs text-sm leading-relaxed text-nude-700/70 [animation-delay:180ms] dark:text-nude-300">
+          وستتواصل معك الصيدلانية لتأكيد الطلب
+        </p>
+
+        @if (placedOrder(); as order) {
+          <div class="animate-fade-in-up mt-5 w-full rounded-2xl border border-nude-200 bg-nude-50/60 p-4 text-sm [animation-delay:220ms] dark:border-nude-700 dark:bg-nude-900/40">
+            @for (item of order.items; track item.productId) {
+              <div class="flex items-center justify-between text-nude-700/70 dark:text-nude-300">
+                <span>{{ item.productTitle }} ×{{ item.quantity }}</span>
+                <span>{{ item.lineTotal }} ج.م</span>
+              </div>
+            }
+            <div class="mt-1.5 flex items-center justify-between border-t border-nude-200 pt-1.5 text-nude-700/70 dark:border-nude-700 dark:text-nude-300">
+              <span>الإجمالي الفرعي</span>
+              <span>{{ order.subtotal }} ج.م</span>
+            </div>
+            @if (order.discountAmount > 0) {
+              <div class="mt-1.5 flex items-center justify-between font-semibold text-ruby-600 dark:text-ruby-400">
+                <span>خصم كوبون {{ order.couponCode }}</span>
+                <span>- {{ order.discountAmount }} ج.م</span>
+              </div>
+            }
+            @if (order.deliveryFee > 0) {
+              <div class="mt-1.5 flex items-center justify-between text-nude-700/70 dark:text-nude-300">
+                <span>رسوم التوصيل</span>
+                <span>{{ order.deliveryFee }} ج.م</span>
+              </div>
+            }
+            <div class="mt-2 flex items-center justify-between border-t border-nude-200 pt-2 font-extrabold text-nude-700 dark:border-nude-700 dark:text-nude-50">
+              <span>الإجمالي</span>
+              <span class="text-base text-gradient">{{ order.totalPrice }} ج.م</span>
+            </div>
+          </div>
+        }
+
+        <button
+          type="button"
+          class="animate-fade-in-up mt-6 rounded-full bg-nude-100 px-8 py-2.5 text-sm font-bold text-nude-700 transition hover:bg-nude-200 [animation-delay:260ms] dark:bg-nude-700 dark:text-nude-100 dark:hover:bg-nude-600"
+          (click)="close()"
+        >
+          إغلاق
+        </button>
+      </div>
+    }
+  </div>
+</div>

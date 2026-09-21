@@ -1,0 +1,161 @@
+<div>
+  <h3 class="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-wide text-nude-600 dark:text-nude-300">
+    <span class="h-4 w-1 rounded-full bg-gradient-to-b from-sage-500 to-sage-300"></span>
+    إضافة منتج جديد
+  </h3>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+    <div>
+      <label for="title" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">اسم المنتج</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="مثال: سيروم فيتامين سي"
+        class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+      />
+      @if (form.controls.title.invalid && form.controls.title.touched) {
+        <p class="mt-1 text-xs font-medium text-blush-500">من فضلك أدخلي اسم المنتج</p>
+      }
+    </div>
+
+    <div>
+      <label for="description" class="mb-1.5 block text-sm font-semibold text-nude-600 dark:text-nude-300">الوصف (نوع البشرة والفوائد)</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="3"
+        placeholder="مناسب للبشرة الجافة، يمنح ترطيبًا عميقًا..."
+        class="w-full resize-none rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+      ></textarea>
+      @if (form.controls.description.invalid && form.controls.description.touched) {
+        <p class="mt-1 text-xs font-medium text-blush-500">من فضلك أدخلي وصفًا للمنتج</p>
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="price" class="mb-1.5 block text-sm font-semibold text-nude-600 dark:text-nude-300">السعر (ج.م)</label>
+        <input
+          id="price"
+          type="number"
+          min="0"
+          step="0.01"
+          formControlName="price"
+          class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+        />
+        @if (form.controls.price.invalid && form.controls.price.touched) {
+          <p class="mt-1 text-xs font-medium text-blush-500">أدخلي سعرًا صحيحًا</p>
+        }
+      </div>
+
+      <div>
+        <label for="category" class="mb-1.5 block text-sm font-semibold text-nude-600 dark:text-nude-300">التصنيف</label>
+        <input
+          id="category"
+          type="text"
+          list="category-suggestions"
+          formControlName="category"
+          placeholder="مثال: بشرة دهنية"
+          class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+        />
+        <datalist id="category-suggestions">
+          @for (type of categorySuggestions; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </datalist>
+        @if (form.controls.category.invalid && form.controls.category.touched) {
+          <p class="mt-1 text-xs font-medium text-blush-500">من فضلك أدخلي تصنيف المنتج</p>
+        }
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="discountPercentage" class="mb-1.5 block text-sm font-semibold text-nude-600 dark:text-nude-300">نسبة الخصم % (اختياري)</label>
+        <input
+          id="discountPercentage"
+          type="number"
+          min="0"
+          max="100"
+          formControlName="discountPercentage"
+          class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+        />
+        @if (form.controls.discountPercentage.invalid && form.controls.discountPercentage.touched) {
+          <p class="mt-1 text-xs font-medium text-ruby-500">النسبة لازم تكون بين 0 و100</p>
+        }
+      </div>
+
+      <div class="flex items-end pb-2.5">
+        <label class="flex cursor-pointer items-center gap-2.5 text-sm font-semibold text-nude-700 dark:text-nude-200">
+          <input
+            type="checkbox"
+            formControlName="available"
+            class="h-5 w-5 rounded border-nude-300 text-sage-500 focus:ring-sage-400 dark:border-nude-600 dark:bg-nude-900"
+          />
+          متاح للطلب
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <label class="mb-1.5 block text-sm font-semibold text-nude-600 dark:text-nude-300">صور المنتج (يمكن اختيار أكتر من صورة)</label>
+      <div class="flex flex-wrap items-center gap-3">
+        @for (preview of imagePreviews(); track preview.url; let i = $index) {
+          <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-nude-200 dark:border-nude-600">
+            <img [src]="preview.url" alt="معاينة المنتج" class="h-full w-full object-cover" />
+            <button
+              type="button"
+              (click)="removeImage(i)"
+              class="absolute end-0.5 top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-nude-900/70 text-white transition hover:bg-ruby-600"
+              aria-label="إزالة الصورة"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+            @if (i === 0) {
+              <span class="absolute inset-x-0 bottom-0 bg-sage-500/90 py-0.5 text-center text-[10px] font-bold text-white">غلاف</span>
+            }
+          </div>
+        }
+
+        <label
+          for="images"
+          class="flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-nude-300 bg-nude-50/50 text-nude-400 transition-all duration-300 hover:scale-105 hover:border-sage-400 hover:text-sage-500 dark:border-nude-600 dark:bg-nude-900/50"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </label>
+        <input
+          id="images"
+          type="file"
+          accept="image/*"
+          multiple
+          class="hidden"
+          (change)="onFilesChange($event)"
+        />
+      </div>
+      <p class="mt-2 text-xs leading-relaxed text-nude-500/80 dark:text-nude-400">
+        أول صورة بتتحط هي صورة الغلاف اللي بتظهر في المتجر
+      </p>
+      @if (fileError()) {
+        <p class="mt-1 text-xs font-medium text-ruby-500">{{ fileError() }}</p>
+      }
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="submitting()"
+      class="btn-shine flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-sage-500 to-sage-400 px-6 py-3 font-bold text-white shadow-lg shadow-sage-400/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-70"
+    >
+      @if (submitting()) {
+        <app-spinner size="sm" />
+        <span>جارِ الإضافة...</span>
+      } @else {
+        <span>إضافة المنتج</span>
+      }
+    </button>
+  </form>
+</div>

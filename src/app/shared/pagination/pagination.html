@@ -1,0 +1,64 @@
+@if (totalPages() > 1) {
+  <nav class="flex flex-col items-center gap-3 sm:flex-row sm:justify-between" aria-label="التنقل بين الصفحات">
+    <p class="text-xs font-medium text-nude-700/60 dark:text-nude-400">
+      عرض <span class="font-bold text-nude-700 dark:text-nude-100">{{ rangeStart() }}–{{ rangeEnd() }}</span>
+      من إجمالي <span class="font-bold text-nude-700 dark:text-nude-100">{{ totalElements() }}</span>
+    </p>
+
+    <div class="flex items-center gap-1.5">
+      <button
+        type="button"
+        [disabled]="isFirst()"
+        class="flex h-9 items-center gap-1 rounded-full border border-nude-200 px-3 text-sm font-semibold text-nude-600 transition hover:border-sage-300 hover:text-sage-600 disabled:pointer-events-none disabled:opacity-40 dark:border-nude-600 dark:text-nude-300"
+        (click)="previous()"
+        aria-label="الصفحة السابقة"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12.5 15 8 10l4.5-5" />
+        </svg>
+        <span class="hidden sm:inline">السابق</span>
+      </button>
+
+      <div class="flex items-center gap-1">
+        @for (token of pageTokens(); track $index) {
+          @if (token === 'ellipsis') {
+            <span class="px-1.5 text-sm text-nude-400">…</span>
+          } @else {
+            <button
+              type="button"
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition"
+              [class.bg-gradient-to-br]="page() === token"
+              [class.from-sage-500]="page() === token"
+              [class.to-sage-600]="page() === token"
+              [class.text-white]="page() === token"
+              [class.shadow-md]="page() === token"
+              [class.shadow-sage-400/30]="page() === token"
+              [class.text-nude-600]="page() !== token"
+              [class.dark:text-nude-300]="page() !== token"
+              [class.hover:bg-nude-100]="page() !== token"
+              [class.dark:hover:bg-nude-700]="page() !== token"
+              (click)="goTo(token)"
+              [attr.aria-current]="page() === token ? 'page' : null"
+              [attr.aria-label]="'الصفحة ' + (token + 1)"
+            >
+              {{ token + 1 }}
+            </button>
+          }
+        }
+      </div>
+
+      <button
+        type="button"
+        [disabled]="isLast()"
+        class="flex h-9 items-center gap-1 rounded-full border border-nude-200 px-3 text-sm font-semibold text-nude-600 transition hover:border-sage-300 hover:text-sage-600 disabled:pointer-events-none disabled:opacity-40 dark:border-nude-600 dark:text-nude-300"
+        (click)="next()"
+        aria-label="الصفحة التالية"
+      >
+        <span class="hidden sm:inline">التالي</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 5 12 10l-4.5 5" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+}

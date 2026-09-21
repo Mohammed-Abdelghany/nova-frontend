@@ -1,0 +1,123 @@
+<section id="contact" class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+  <div class="animate-fade-in-up mx-auto mb-10 max-w-2xl text-center">
+    <span class="inline-flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest text-blush-500">
+      <span class="h-1.5 w-1.5 rounded-full bg-blush-400"></span>
+      تواصلي معنا
+      <span class="h-1.5 w-1.5 rounded-full bg-blush-400"></span>
+    </span>
+    <h2 class="mt-3 text-3xl font-extrabold text-nude-700 sm:text-4xl dark:text-nude-50">عندك سؤال أو استفسار؟</h2>
+    <p class="mt-3 text-nude-700/70 dark:text-nude-300">ابعتيلنا رسالة أو تواصلي معنا مباشرة على واتساب، وهنرد عليكِ في أقرب وقت</p>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-5">
+    <div class="rounded-3xl border border-nude-200 bg-white p-6 shadow-[var(--shadow-card)] dark:border-nude-700 dark:bg-nude-800 sm:p-8 lg:col-span-3">
+      @if (!sent()) {
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+          <div>
+            <label for="contactName" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">الاسم</label>
+            <input
+              id="contactName"
+              type="text"
+              formControlName="name"
+              placeholder="مثال: سارة أحمد"
+              class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+            />
+            @if (form.controls.name.invalid && form.controls.name.touched) {
+              <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي اسمك</p>
+            }
+          </div>
+
+          <div>
+            <label for="contactPhone" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">رقم الموبايل</label>
+            <input
+              id="contactPhone"
+              type="tel"
+              formControlName="phone"
+              placeholder="01xxxxxxxxx"
+              dir="ltr"
+              class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+            />
+            @if (form.controls.phone.invalid && form.controls.phone.touched) {
+              <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك أدخلي رقم موبايل مصري صحيح</p>
+            }
+          </div>
+
+          <div>
+            <label for="contactMessage" class="mb-1.5 block text-sm font-semibold text-nude-700 dark:text-nude-200">رسالتك</label>
+            <textarea
+              id="contactMessage"
+              formControlName="message"
+              rows="4"
+              placeholder="اكتبي استفسارك هنا..."
+              class="w-full resize-none rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
+            ></textarea>
+            @if (form.controls.message.invalid && form.controls.message.touched) {
+              <p class="animate-fade-in-up mt-1 text-xs font-medium text-ruby-500">من فضلك اكتبي رسالة لا تقل عن 10 حروف</p>
+            }
+          </div>
+
+          @if (submitError()) {
+            <div class="animate-fade-in rounded-xl border border-ruby-200 bg-ruby-50 px-4 py-2.5 text-sm font-medium text-ruby-600 dark:border-ruby-800 dark:bg-ruby-900/30 dark:text-ruby-300">
+              {{ submitError() }}
+            </div>
+          }
+
+          <button
+            type="submit"
+            [disabled]="submitting()"
+            class="btn-shine flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-sage-500 to-sage-400 px-6 py-3 font-bold text-white shadow-lg shadow-sage-400/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-70"
+          >
+            @if (submitting()) {
+              <app-spinner size="sm" />
+              <span>جارِ الإرسال...</span>
+            } @else {
+              <span>إرسال الرسالة</span>
+            }
+          </button>
+        </form>
+      } @else {
+        <div class="flex flex-col items-center py-6 text-center">
+          <div class="animate-scale-in mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-sage-100 to-sage-200 text-sage-600 shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 class="animate-fade-in-up text-lg font-extrabold text-nude-700 dark:text-nude-50">تم إرسال رسالتك بنجاح</h3>
+          <p class="animate-fade-in-up mt-2 max-w-xs text-sm leading-relaxed text-nude-700/70 dark:text-nude-300">
+            هنتواصل معاكِ في أقرب وقت
+          </p>
+          <button
+            type="button"
+            class="animate-fade-in-up mt-5 rounded-full bg-nude-100 px-8 py-2.5 text-sm font-bold text-nude-700 transition hover:bg-nude-200 dark:bg-nude-700 dark:text-nude-100 dark:hover:bg-nude-600"
+            (click)="sendAnother()"
+          >
+            إرسال رسالة تانية
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="flex flex-col justify-center gap-4 rounded-3xl border border-sage-200 bg-gradient-to-br from-sage-50 to-white p-6 text-center shadow-[var(--shadow-card)] dark:border-sage-800 dark:from-nude-800 dark:to-nude-800 sm:p-8 lg:col-span-2">
+      <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.45 1.33 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.5 0 9.96-4.46 9.96-9.96 0-2.66-1.04-5.16-2.92-7.04A9.9 9.9 0 0 0 12.04 2Zm0 18.2h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.38c0-4.55 3.7-8.25 8.26-8.25a8.2 8.2 0 0 1 5.84 2.42 8.2 8.2 0 0 1 2.42 5.84c0 4.55-3.71 8.23-8.27 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.4-.12-.56.13-.17.24-.64.81-.79.98-.14.17-.29.19-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.12.25-.29.37-.44.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01a.9.9 0 0 0-.66.31c-.23.24-.86.85-.86 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.24 3.74.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.23-.17-.48-.29Z" />
+        </svg>
+      </span>
+      <h3 class="text-lg font-extrabold text-nude-700 dark:text-nude-50">تفضلي تواصلي مباشرة</h3>
+      <p class="text-sm leading-relaxed text-nude-700/70 dark:text-nude-300">
+        لو محتاجة رد سريع، ابعتيلنا على واتساب وهنرد عليكِ فورًا
+      </p>
+      <a
+        [href]="whatsappLink"
+        target="_blank"
+        rel="noopener"
+        class="btn-shine mx-auto flex w-full max-w-xs items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-bold text-white shadow-lg shadow-[#25D366]/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.45 1.33 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.5 0 9.96-4.46 9.96-9.96 0-2.66-1.04-5.16-2.92-7.04A9.9 9.9 0 0 0 12.04 2Z" />
+        </svg>
+        <span>تواصل عبر واتساب</span>
+      </a>
+    </div>
+  </div>
+</section>
