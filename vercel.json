@@ -1,7 +1,7 @@
 {
   "outputDirectory": "dist/pharmaglow-front/browser",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://REPLACE-WITH-YOUR-RENDER-BACKEND-URL.onrender.com/api/$1" },
+    { "source": "/api/(.*)", "destination": "https://nova-backend-fnj0.onrender.com/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
