@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { SKIN_TYPES } from '../../../../core/constants/skin-types';
 import { Product } from '../../../../core/models/product.model';
 import { ProductService } from '../../../../core/services/product.service';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -26,7 +25,7 @@ export class AddProductForm {
 
   readonly added = output<Product>();
 
-  protected readonly categorySuggestions = SKIN_TYPES;
+  protected readonly categorySuggestions = signal<string[]>([]);
   protected readonly submitting = signal(false);
   protected readonly imagePreviews = signal<ImagePreview[]>([]);
   protected readonly fileError = signal<string | null>(null);
@@ -39,6 +38,10 @@ export class AddProductForm {
     discountPercentage: [0, [Validators.min(0), Validators.max(100)]],
     available: [true]
   });
+
+  constructor() {
+    this.productService.getCategories().subscribe((categories) => this.categorySuggestions.set(categories));
+  }
 
   onFilesChange(event: Event): void {
     const input = event.target as HTMLInputElement;

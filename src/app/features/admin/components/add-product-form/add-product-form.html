@@ -60,7 +60,7 @@
           class="w-full rounded-xl border border-nude-200 bg-nude-50/50 px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:border-sage-400 focus:bg-white focus:ring-4 focus:ring-sage-100 dark:border-nude-600 dark:bg-nude-900/50 dark:text-nude-50 dark:focus:bg-nude-900"
         />
         <datalist id="category-suggestions">
-          @for (type of categorySuggestions; track type) {
+          @for (type of categorySuggestions(); track type) {
             <option [value]="type">{{ type }}</option>
           }
         </datalist>
